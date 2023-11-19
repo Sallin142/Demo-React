@@ -1,40 +1,38 @@
-import React, { useState } from 'react';
-import TodoList from './components/TodoList';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { TodoProvider } from './context/TodoContext';
+import TodoPage from './pages/TodoPage';
+import AboutPage from './pages/AboutPage';
 
 function App() {
-  const [todos, setTodos] = useState([]);
-  const [task, setTask] = useState('');
 
-  const addTodo = () => {
-    if (task !== '') {
-      const newTodos = [...todos, { task, completed: false }];
-      setTodos(newTodos);
-      setTask(''); // Clear the input field after adding a task
-    }
-  };
 
-  const toggleTodo = index => {
-    const newTodos = todos.map((todo, i) => {
-      if (i === index) {
-        return { ...todo, completed: !todo.completed };
-      }
-      return todo;
-    });
-    setTodos(newTodos);
-  };
 
+
+  
   return (
-    <div className="App">
-      <h1>My To-Do List</h1>
-      <input 
-        type="text" 
-        value={task}
-        onChange={e => setTask(e.target.value)}
-        placeholder="Enter a task"
-      />
-      <button onClick={addTodo}>Add Task</button>
-      <TodoList todos={todos} toggleTodo={toggleTodo} />
-    </div>
+    <TodoProvider>
+      <Router>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/about">About</Link>
+              </li>
+            </ul>
+          </nav>
+
+          {/* Replace Switch with Routes */}
+          <Routes>
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/" element={<TodoPage />} />
+          </Routes>
+        </div>
+      </Router>
+    </TodoProvider>
   );
 }
 
